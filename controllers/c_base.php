@@ -27,4 +27,16 @@ class base_controller {
 			
 	}
 	
+    protected function template_setup($view, $title, $msg = NULL) {
+        $this->template->title = $title;
+        $this->template->content = View::instance($view);
+        $this->template->content->msg = $msg;
+    }
+    
+    //$client_files_head = ['/css/profile.css/', '/css/master.css'];
+    //$this->template->client_files_head = Utils::load_client_files($client_files_head);
+    //$client_files_body = ['/js/profile.js/', '/js/master.js'];
+    //$this->template->client_files_body = Utils::load_client_files($client_files_body);
+
+
 } # eoc

@@ -12,6 +12,11 @@
 
 <body>	
 
+    <nav>
+        <menu>
+            
+        </menu>
+    </nav>
 	<?php if(isset($content)) echo $content; ?>
 
 	<?php if(isset($client_files_body)) echo $client_files_body; ?>
