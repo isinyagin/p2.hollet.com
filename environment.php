@@ -22,9 +22,9 @@ define('FAKEMAIL', FALSE);
 define('REMOTE_DB', FALSE);
 
 if (REMOTE_DB) {
-	define('DB_HOST', '');
-	define('DB_USER', '');
-	define('DB_PASS', '');
+	define('DB_HOST', 'hollet-com.mysql.eu1.frbit.com');
+	define('DB_USER', 'hollet-com');
+	define('DB_PASS', 'tevYl7xJGnwCjTqS');
 
 } else {
 	define('DB_HOST', 'localhost');
