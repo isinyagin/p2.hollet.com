@@ -18,7 +18,8 @@ class posts_controller extends base_controller {
     }
 
     public function p_add() {
-        if(!isset($_POST['content']) || empty(trim($_POST['content']))) {
+        $content = array_key_exists('content', $_POST) ? trim($_POST['content']) : null;
+        if(empty($content)) {
             $error = "A letter can't be empty";
             self::redirect('/posts/add/'.$error);
         }
@@ -26,7 +27,7 @@ class posts_controller extends base_controller {
         $array = ['user_id'  => $this->user->user_id,
                   'created'  => Time::now(),
                   'modified' => Time::now(),
-                  'content'  => $_POST['content'] ];
+                  'content'  => $content ];
         DB::instance(DB_NAME)->insert('posts', $array);
         $msg = "A letter has been added";
         self::redirect('/posts/index/'.$msg);
@@ -55,11 +56,13 @@ class posts_controller extends base_controller {
     }
 
     public function p_resend($msg = NULL) {
-        if (!isset($_POST) || empty(trim($_POST['name'])) || empty(trim($_POST['email']))) {
+        $name = array_key_exists('content', $_POST) ? trim($_POST['content']) : null;
+        $email = array_key_exists('content', $_POST) ? trim($_POST['content']) : null;
+        if (empty($email) || empty($name)) {
             $error = "All fields are required";
             self::redirect('/posts/p_resend/'.$error);
         }
-        self::send_email($_POST['letter'], $_POST['name'], $_POST['email']);
+        self::send_email($_POST['letter'], $name, $email);
         $msg = "You letter has been resent";
         self::redirect('/posts/index/'.$msg);
     }
@@ -81,12 +84,13 @@ class posts_controller extends base_controller {
     }
 
     public function p_edit($msg = NULL) {
-        if(!isset($_POST['content']) || empty(trim($_POST['content']))) {
+        $content = array_key_exists('content', $_POST) ? trim($_POST['content']) : null;
+        if(empty($content)) {
             $error = "Post can't be empty";
             self::redirect('/posts/p_edit/'.$error);
         }
 
-        $data = ['content' => $_POST['content'], 
+        $data = ['content' => $content,
                  'modified' => Time::now() ];
         $where_condition = 'WHERE user_id = "'.$_POST['user_id'].'" 
                             AND created = "'.$_POST['created'].'" ';

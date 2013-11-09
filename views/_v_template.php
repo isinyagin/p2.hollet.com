@@ -15,7 +15,7 @@
 
             <header class="row">
                 <nav class="navbar"> 
-                    <a class="navbar-brand" href="/">Hollet</a>
+                    <a class="navbar-brand" href="/">Holiday Letters</a>
                     <ul class="nav navbar-nav">
                     <?php if($user): ?>
                         <li><a href='/posts/index'>Letters</a></li>

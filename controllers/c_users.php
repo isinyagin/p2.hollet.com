@@ -16,11 +16,18 @@ class users_controller extends base_controller {
     }
 
     public function signup($msg = NULL) {
-        if($this->user)
-            self::redirect('/posts/index');
-
-        self::template_setup('v_users_signup', "Sign up", $msg);
-        echo $this->template;
+        if(!$this->user) {
+            self::template_setup('v_users_signup', "Sign up", $msg);
+            echo $this->template;
+        } else {
+            if($this->user->last_login === "0") {
+                $msg = "You've signed up, please log in";
+                self::redirect('/users/login/'.$msg);
+            } else if ($this->user) {
+                $msg = "You are logged in";
+                self::redirect('/users/profile/'.$msg);
+            }
+        }
     }
 
     public function p_signup() {
@@ -34,8 +41,8 @@ class users_controller extends base_controller {
         if($user) {
             $this->userObj->send_signup_email($_POST, $subject = "Welcome to Hollet!");
             Post::follow($user['user_id'], $user['user_id']); /* follow yourself by default */
-            $msg = 'You\'re signed up.';
-            self::redirect('/users/profile/'.$msg);
+            $msg = 'You\'re signed up. Please log in';
+            self::redirect('/users/login/'.$msg);
         } else {
             $error = 'Something went wrong, try again'; 
             self::redirect('/users/signup/'.$error);
@@ -43,11 +50,11 @@ class users_controller extends base_controller {
     }
 
     public function login($msg = NULL) {
-        if($this->user)
+        if(!$this->user || $this->user->last_login === "0") {
+            self::template_setup('v_users_login', "Log in", $msg);
+            echo $this->template;
+        } else 
             self::redirect('/users/profile');
-
-        self::template_setup('v_users_login', "Log in", $msg);
-        echo $this->template;
     }
 
     public function p_login() {
@@ -61,7 +68,7 @@ class users_controller extends base_controller {
     }
 
     public function profile($msg = NULL) {
-        if (!$this->user)
+        if(!$this->user || $this->user->last_login === "0")
             self::redirect('/users/login');
 
         self::template_setup('v_users_profile', 'Profile', $msg);
