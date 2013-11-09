@@ -18,7 +18,7 @@ class posts_controller extends base_controller {
     }
 
     public function p_add() {
-        if(!isset($_POST['content']) || empty($_POST['content'])) {
+        if(!isset($_POST['content']) || empty(trim($_POST['content']))) {
             $error = "A letter can't be empty";
             self::redirect('/posts/add/'.$error);
         }
@@ -81,7 +81,7 @@ class posts_controller extends base_controller {
     }
 
     public function p_edit($msg = NULL) {
-        if(!isset($_POST['content']) || empty($_POST['content'])) {
+        if(!isset($_POST['content']) || empty(trim($_POST['content']))) {
             $error = "Post can't be empty";
             self::redirect('/posts/p_edit/'.$error);
         }

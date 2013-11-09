@@ -1,16 +1,35 @@
-<p><?=$msg?></p>
+<?php if($msg): ?>
+    <div class="alert alert-danger"> <?=$msg?> </div>
+<?php endif; ?>
+
 <?php foreach($posts as $post): ?>
-    <strong>
-        <?=$post['first_name']?>
-        <?=$post['last_name'].': '?>
-    </strong>
-    <?=$post['content']?> (<?=Time::time_ago($post['created'])?>)<br>
-    <?php if($post['post_user_id'] === $user->user_id): ?>
-        <form method = 'POST' action = '/posts/p_modify/<?=$post['created']?>'>
-            <input type='hidden' name='content' value="<?=$post['content']?>"> 
-            <input type='submit' name='delete' value='Delete Post'>
-            <input type='submit' name='edit' value='Edit Post'>
-            <input type='submit' name='resend' value='Send to Email'>
-        </form>
-    <?php endif; ?>
+    <article class="panel panel_default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <?=$post['first_name']?>
+                <?=$post['last_name'].' ('.Time::time_ago($post['created']).') : '?>
+            </h4>
+        </div>
+
+        <div class="panel-body">
+            <?=$post['content']?>
+        </div>
+
+        <?php if($post['post_user_id'] === $user->user_id): ?>
+            <div class="panel-footer">
+                <form role="form" method = 'POST' action = '/posts/p_modify/<?=$post['created']?>'>
+                    <input type='hidden' name='content' value="<?=$post['content']?>"> 
+                    <button type='submit'class="btn btn-danger btn-xs" name='delete'> 
+                        Delete Post
+                    </button>
+                    <button type='submit'class="btn btn-info btn-xs" name='edit'> 
+                        Edit Post
+                    </button>
+                    <button type='submit'class="btn btn-primary btn-xs" name='resend'>
+                        Send to Email
+                    </button>
+                </form>
+            </div>
+        <?php endif; ?>
+    </article>
 <?php endforeach;?> 

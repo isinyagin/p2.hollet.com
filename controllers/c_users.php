@@ -32,28 +32,27 @@ class users_controller extends base_controller {
 
         $user = $this->userObj->signup($_POST);
         if($user) {
-            Post::follow($user['user_id'], $user['user_id']); /* follow yourself by default */
-            $this->userObj->create_initial_avatar($user['user_id']);
             $this->userObj->send_signup_email($_POST, $subject = "Welcome to Hollet!");
-            $msg = 'You\'re signed up. Please log in';
-            self::redirect('/users/login/'.$msg);
+            Post::follow($user['user_id'], $user['user_id']); /* follow yourself by default */
+            $msg = 'You\'re signed up.';
+            self::redirect('/users/profile/'.$msg);
         } else {
             $error = 'Something went wrong, try again'; 
             self::redirect('/users/signup/'.$error);
         }
     }
 
-    public function login() {
-        if ($this->user)
-            self::redirect('/posts/index');
+    public function login($msg = NULL) {
+        if($this->user)
+            self::redirect('/users/profile');
 
-        self::template_setup('v_users_login', "Log in", NULL);
+        self::template_setup('v_users_login', "Log in", $msg);
         echo $this->template;
     }
 
     public function p_login() {
         $token = $this->userObj->login($_POST['email'], $_POST['password']);
-        $this->userObj->login_redirect($token, $_POST['email'], '/posts/index');
+        $this->userObj->login_redirect($token, $_POST['email'], '/users/profile');
     }
 
     public function logout() {
@@ -65,13 +64,7 @@ class users_controller extends base_controller {
         if (!$this->user)
             self::redirect('/users/login');
 
-        //$client_files_head = ['/css/profile.css/', '/css/master.css'];
-        //$this->template->client_files_head = Utils::load_client_files($client_files_head);
-
         self::template_setup('v_users_profile', 'Profile', $msg);
-        //$client_files_body = ['/js/profile.js/', '/js/master.js'];
-        //$this->template->client_files_body = Utils::load_client_files($client_files_body);
-
         echo $this->template;
     }
 
